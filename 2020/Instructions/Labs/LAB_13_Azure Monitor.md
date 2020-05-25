@@ -10,121 +10,165 @@ lab:
 
 ## Lab scenario
 
+You have been asked to create a proof of concept demonstration for monitoring virtual machine performance. Specifically, you want to:
 
-Azure Monitor maximizes the availability and performance of your applications and services by delivering a comprehensive solution for collecting, analyzing, and acting on telemetry from your cloud and on-premises environments. It helps you understand how your applications are performing and proactively identifies issues affecting them and the resources they depend on.
+- Configure a virtual machine so data can be collected.
+- Show what data can be collected.
+- Show how the data can be used including how to query the data. 
 
-Contoso would like to see a proof of concept for their secuirity team. They would like to see Monitoring, Security Posture of the subscription and what Azure has to offer in terms of a SIEM and a SOAR. They initially want to start with monitoring capabilities of Azure.
+## Lab objectives
 
-## Objectives
+In this lab, you will complete:
 
-Contoso would like to see the capabilities of Azure Monitor and would like the following tasks completed.
-- 
-+ Task 1: Deploy an Azure VM to monitor
-+ Task 2: Create a workspace
-+ Task 3: Enable the Log Analytics VM Extension
-+ Task 4: Collect event and performance of a Windows VM
-+ Task 5: View data collected
-
-## Instructions
+- Exercise 1: Collect data from an Azure virtual machine with Azure Monitor
 
 ## Exercise 1: Collect data from an Azure virtual machine with Azure Monitor
 
+### Exercise timing: 20 minutes
 
-Azure Monitor can collect data directly from your Azure virtual machines into a Log Analytics workspace for detailed analysis and correlation. Installing the Log Analytics VM extension for Windows and Linux allows Azure Monitor to collect data from your Azure VMs. This exercise shows you how to configure and collect data from your Azure Linux or Windows VMs using the VM extension with a few easy steps.  
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is the region to use for class. 
 
+In this exercise, you will complete: 
 
-### Task 1: Deploy an Azure VM to monitor.
+- Task 1: Deploy an Azure virtual machine 
+- Task 2: Create a Log Analytics workspace
+- Task 3: Enable the Log Analytics virtual machine extension
+- Task 4: Collect virtual machine event and performance data
+- Task 5: View and query collected data 
 
-1.  Open the Azure Cloud Shell and run the following two commands to create a Resource Group and Azure VM that you will use to monitor:
+#### Task 1: Deploy an Azure virtual machine
+
+1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
+
+1. Ensure **PowerShell** is selected in the upper-left drop-down menu of the Cloud Shell pane.
+
+1. Create a new resource group. This resource group will be used for labs 13, 14, and 15. 
 
     ```
     New-AzResourceGroup -Name AZ500LAB131415 -Location EastUS
     ```
 
+1. Create a new virtual machine. 
+
     ```
     New-AzVm -ResourceGroupName "AZ500LAB131415" -Name "myVM" -Location "East  US" -VirtualNetworkName "myVnet" -SubnetName "mySubnet" -SecurityGroupName   "myNetworkSecurityGroup" -PublicIpAddressName "myPublicIpAddress"     -OpenPorts 80,3389
     ```
 
-1.  When prompted for credentials enter **LocalAdmin** as the User and use the password **Pa55w.rd1234**
+1.  When prompted for credentials:
 
-### Task 2: Create a workspace
+	- User: **localadmin** 
 
-1.  In the Azure portal, select **All services**. In the list of resources, type **Log Analytics**. As you begin typing, the list filters based on your input. Select **Log Analytics workspaces**.
+	- Password for user localadmin: **Pa55w.rd1234**
 
+1. Wait for the resources to be created. 
 
-2.  Select **Add**, and then select choices for the following items:
+1. Confirm that your virtual machine, **myVM**, was created and the **ProvisioningState** is **Succeeded**.
 
-       * Select a **Subscription** to link to by selecting from the drop-down list if the default selected is not appropriate.
-       * For **Resource Group**, select **AZ500LAB131415** which is the Resource Group that contains the VM you created in Task 1.
-       * Provide a unique name for the new **Log Analytics workspace**, such as *myWorkspaceDemoyourname*.  
-       * Select the **EastUS** as the location. 
-       * Leave the pricing Tier as **Per Gb (2018)**
+	```
+	Get-AzVM
+	```
+
+1. Close the Cloud Shell. 
+
+#### Task 2: Create a Log Analytics workspace
+
+In this task, you will create a Log Analytics workspace. 
+
+1. Continue in the Portal.
+
+1. Use the Portal menu and select **All services**. 
+
+1. Search for and select **Log Analytics workspaces**.
+
+1. Click **+ Add** and complete the required information. Take the default value for a setting that is not specified.
+
+	- Resource group: **AZ500LAB131415**
+
+	- Name: **Select a unique name that is available**
+
+	- Region: **EastUS** 
   
-3.  Click **Review + Create** > **Create**
+1. Move to the **Pricing tier** tab and notice you are on **Pay-as-you-go (Per GB 2018)**.
 
+1. Click **Review + Create** and then **Create**.
 
-### Task 3: Enable the Log Analytics VM Extension
+1. Wait for the resource to deploy, then click **Go to resource**.
 
+#### Task 3: Enable the Log Analytics virtual machine extension
 
-For Windows and Linux virtual machines already deployed in Azure, you install the Log Analytics agent with the Log Analytics VM Extension. Using the extension simplifies the installation process and automatically configures the agent to send data to the Log Analytics workspace that you specify. The agent is also upgraded automatically when a newer version is released, ensuring that you have the latest features and fixes. Before proceeding, verify the VM is running otherwise the process will fail to complete successfully. 
- 
+In this task, you will enable the Log Analytics virtual machine extension. This extension installs an agent on Windows and Linux virtual machines. This agent provides data from the virtual machine to the Log Analytics workspace. Once the agent is installed it will be automatically upgraded ensuring you always have the latest features and fixes. 
 
-1.  In the Azure portal, select **All services** found in the upper left-hand corner. In the list of resources, type **Log Analytics**. As you begin typing, the list filters based on your input. Select **Log Analytics workspaces**.
+1. Continue working with your new Log Analytics workspace.
 
-2.  In your list of Log Analytics workspaces, select **myWorkspaceDemo** created earlier.
+1. Under **Workspace Data Sources** select **Virtual machines**.
 
-    **Note**: The name of your workspace may be different to **myWorkspaceDemo**.
+	> For the agent to be successfully installed, the virtual machine must be running.
 
+1. Notice **myVM** is listed as **Not connected**.
 
-3.  On the left-hand menu, under **Workspace Data Sources**, select **Virtual machines**.  
+1. Click **myVM** and then select **Connect**. 
 
-4.  In the list of **Virtual machines**, select a virtual machine you want to install the agent on. Notice that the **Log Analytics connection status** for the VM indicates that it is **Not connected**.
+1. Wait for Log Analytics to connect to the virtual machine. 
 
-5.  In the details for your virtual machine, select **Connect**. The agent is automatically installed and configured for your Log Analytics workspace. This process takes a few minutes, during which time the **Status** shows **Connecting**.
+	> This may take a few minutes. The **Status** will change from **Connecting** to **This workspace**. 
 
-6.  After you install and connect the agent, the **Log Analytics connection status** will be updated with **This workspace**.
+#### Task 4: Collect virtual machine event and performance data
 
-### Task 4: Collect event and performance of a Windows VM.
+In this task, you will configure collecting data from the Windows System log and several common performance counters. You will also review the other sources that are available.
 
+1. Return to your Log Analytics workspace.
 
-Azure Monitor can collect events from the Windows event logs or Linux Syslog and performance counters that you specify for longer term analysis and reporting, and take action when a particular condition is detected. Follow these steps to configure collection of events from the Windows system log and Linux Syslog, and several common performance counters to start with.  
+1. Under **Settings** select **Advanced settings**.
 
+1. Select **Data** and notice your choices for Windows Event Logs, Windows Performance Counters, Linux Performance Counters, IIS Logs, and Syslog. 
 
-1.  On the Log Analytics workspaces blade, Under **settings** select **Advanced settings**.
+3. Select **Windows Event Logs**.
 
-1.  Select **Data**, and then select **Windows Event Logs**.
+1. In the **Collect events from the following event logs** type in **System** and then click the **+** sign.
 
-1.  You add an event log by typing in the name of the log.  Type **System** and then select the plus sign **+**.
+	> This is how you add event logs to the workspace. Other choices could be **Hardware events** and **Key Management Service**.  
 
-1.  In the table, check the severities **Error** and **Warning**.
+1. Select only the **Error** and **Warning** check boxes.
 
-1.  Select **Save** at the top of the page to save the configuration. Click **OK**
+1. To add an event log, use the  You add an event log by typing in the name of the log.  Type **System** and then select the plus sign **+**.
 
-1.  Select **Windows Performance Counters** to enable collection of performance counters on a Windows computer.
+1. Select **Windows Performance Counters**.
 
-1.  When you first configure Windows Performance counters for a new Log Analytics workspace, you are given the option to quickly create several common counters. They are listed with a checkbox next to each.
+1. Notice there is a suggested list of performance counters. You can customize this list. 
 
-1. Select **Add the selected performance counters**.  They are added and preset with a ten second collection sample interval.
+1. Click **Add the selected performance counters**. The counters are added and preset with a ten second collection sample interval.
   
-1.  Select **Save** at the top of the page to save the configuration. Click **OK**
+1. **Save** (top of page) and then click **OK**.
+
+#### Task 5: View and query collected data
+
+In this task, you will run a log search on your data collection. 
+
+1. Continue working with your Log Analytics workspace.
+
+1. Under **General** select **Logs**.
+
+1. Click **Get started**.  
+
+1. In the **All queries** pane, select **Virtual machines**.
+
+1. Notice the large number of predefined queries. Take a minute to review the list.
+
+1. Select a query. For example, Virtual machine available memory.
+
+1. Notice the query opens in the editor. Log analytics uses the Kusto query language. You can customize the existing queries or create your own. 
+
+1. Click *Run**.
+
+	> Since this virtual machine was just created, there may not be any data yet. 
+
+1. Notice the ability to **Chart** your data, **Save** your query, and create a **New alert rule** based on the query.
+
+> Results: In this lab, you learned how to use a Log Analytics workspace to configure data sources and query logs. 
+
+**Clean up resources**
+
+	> Do not remove the resources from this lab as they are needed for the Azure Security Center lab and the Azure Sentinel lab.
 
 
-### Task 5: View data collected
-
-
-Now that you have enabled data collection, lets run a simple log search example to see some data from the target VMs.  
-
-
-1.  In the selected workspace, from the left-hand pane, under **General** select **Logs**.
-
-1.  Click **Get started**.  
-
-1. On the Logs query page, type `Perf` in the query editor and select **Run**.
-
-
-       > Note since the VM has only being ran for a few minutes you may need to wait to get some data returned.
-
-       > Please leave the resources in this lab for the following labs on Azure Security Center and Azure Sentinel
-
-**Results**: In this lab, you learned how to monitor resources with Azure Monitor. Do not remove the resources from this lab as they are needed for both the Azure Security Center lab and the Azure Sentinel lab.
 

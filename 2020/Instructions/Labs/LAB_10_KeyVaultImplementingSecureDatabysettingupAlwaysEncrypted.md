@@ -1,7 +1,7 @@
 ---
 lab:
     title: '10 - Key Vault (Implementing Secure Data by setting up Always Encrypted)'
-    module: 'Module 03 - Secure data and applications'
+    module: 'Module 03 - Secure Data and Applications'
 ---
 
 # Lab 10 - Key Vault (Implementing Secure Data by setting up Always Encrypted)
@@ -10,358 +10,384 @@ lab:
 
 ## Lab scenario
 
-Contoso has a new application that has a compliance requirement for the data to be encrypted at all times, at rest in transit and in use. Furthermore they also need to ensure that they keep any and all secrets, and certificates in a secure location. 
+You have been asked to create a proof of concept application that makes use of Always encrypted in SQL. Secrets, keys, and certificates should be stored in the key vault. It would be nice if this was combined with some of the advantages in Azure app registration to improve the security posture of the application. Specifically, the proof of concept should include:
 
-In this lab, you will get started with Azure Key Vault to create a hardened container (a vault) in Azure, to store and manage cryptographic keys and secrets in Azure. First you will use Azure PowerShell. Then you will store a password as a secret that could then be used with an Azure application.
+- Creating a key vault and storing keys and secrets in the vault.
+- Create a SQL Database and encrypting column information using Always Encrypted.
 
-## Objectives
+## Lab objectives
 
-Contoso would like to create proof of concept appplication that makes use of Always encrypted in SQL. They would like to ensure that they store and secrets, certificates and keys in Azure Key Vault where possible. They would also like to combine this with some of the advantages in Azure app registration to improve the security posture of the application.
+In this lab, you will complete:
 
-In this lab, you will:
-
-+ Deploy an Azure Key Vault
-+ Add a secret to Azure Key Vault 
-+ Enable a client application
-+ Use Key Vault to Encrypt Data with Azure SQL Database 
-
-## Instructions
-
-### Exercise 1
-
-#### Task 1: xxx
-
-
+- Exercise 1: Configure the key vault with a key and a secret
+- Exercise 2: Create an application to demonstrate using the key vault for encryption
+ 
 ## Exercise 1: Introduction to Azure Key Vault
 
+### Estimated timing: xx minutes
 
-### Task 1: Download SQL Server Management Studio
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for you class. 
 
-1.  To download the latest version of SQL Management Studio required for this lab visit the following link and select download SQL Management Studio **`https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017`**
+In this exercise, you will complete:
 
-     **Note:** You do not need to wait for the SQL Management Studio to install   before continuing.
+- Task 1: Download and install SQL Server Management Studio
+- Task 2: Create and configure a key vault
+- Task 3: Add a key to the key vault
+- Task 4: Add a secret to the key vault
 
-### Task 2: Use PowerShell to create a Key Vault
+#### Task 1: Download and install SQL Server Management Studio
 
+In this task, you will download and install SQL Server Management Studio (SSMS).
 
-In this exercise, you will use PowerShell to create an Azure Key Vault.
+1. Visit the [Download SQL Server Management Studio](**https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017) page.
 
+2. Use the link to download the executable and then run the installer.  
 
-1.  Start PowerShell by clicking **Start > PowerShell**
+	> You do not need to wait for the SQL Management Studio to install before continuing.
 
-1.  Use the following command to authenticate to Azure using the account for your Azure subscription.
+#### Task 2: Create and configure a Key Vault
 
-    ```
-    Login-AzAccount
-    ```
+In this task, you will create a lab resource group and a key vault. You will also configure the key vault permissions.
 
-1.  Create a new Resource Group 
+1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
+
+1. Open the Cloud Shell. 
+
+1. Ensure **PowerShell** is selected in the upper-left drop-down menu.
+
+1. Create a new resource group for the lab. 
 
     ```
     New-AzResourceGroup -Name 'AZ500LAB10' -Location 'eastus'
     ```
 
-
-1.  Create a key vault in the resource group. **The VaultName must be unique therefore change <keyvault name> to something unique.**
+1. Create a key vault in the resource group. The key vault name must be unique. Remember the name you have chosen. You will need it throughout this lab.  
 
     ```
     New-AzKeyVault -VaultName '<keyvault name>' -ResourceGroupName 'AZ500LAB10' -Location 'eastus'
     ```
 
-    **Note**: The output of this shows important pieces of information: Vault Name in this case that is KeyVaultPS and the Vault URI: `https://KeyVaultPS.vault.azure.net`
+	> The output of this shows important pieces of information: Vault Name and the Vault URI. The Vault URI takes the form: https://your_name.vault.azure.net/
 
+1. Close the Cloud Shell. 
 
+1. In the Azure Portal navigate to the **AZ500LAB10** Resource Group.
 
-1.  In the Azure Portal open the **AZ500LAB10** Resource Group.
+1. Select your key vault. 
 
-1.  Click on the KeyVaultPS to examine what you have created.
+1. Under **Settings** select **Access Policies** and then **+ Add Access Policy**.
 
-1. Click **Access Policies** > **+ Add Access Policy**
+1. Configure the Access Policy. Take the default if the value is not specified. 
 
-1. Select **Key, Secret and Certificate Management** from **Configure from template (optional)**
+	- Configure from template (optional): **Key, Secret, & Certificate Management**
 
-1. Make sure for each of **Key, Secret and Certificate** permissions you select the dropdown box and click **Select All**
+	- Key permissions: **Select all** - total of 16 permissions.
+	
+	- Secret permissions: **Select all** - total of 8 permissions.
 
-1. You should have 16 selected for Key, 8 selected for Secret and 16 selected for Certificate.
+	- Certification permissions: **Select all** - total of 16 permissions. 
 
-1. Click **Select Principal** and search for and then click on your account, then click on **Select**
+	- Select principal: **Add your account** > **Select**
 
-1. Click **Add** and then **Save**
+1. Click **Add** to add the access policy. 
 
-### Task 3: Add a key and secret to Key Vault
+1. **Save** your changes. 
 
-1.  Return to the PowerShell window.
+	> Take a minute to check back on your SMSS installation. 
 
-1.  Add a software-protected key to the Key Vault using this command. Be sure to change the placeholder text to your vault name.
+#### Task 3: Add a key to Key Vault
+
+In this task, you will ad a key to the kev vault and view information about the key. 
+
+1. Open the Cloud Shell.
+
+1. Ensure **PowerShell** is selected in the upper-left drop-down menu.
+
+1. Add a software-protected key to the Key Vault. Change YourVaultName to the name of your vault. Notice the name of the key is MyLabKey. 
 
     ```
     $key = Add-AZKeyVaultKey -VaultName '<YourVaultName>' -Name 'MyLabKey' -Destination 'Software'
     ```
 
-1.  Move back to **KeyVaultPS** in the Azure portal. Click **Keys** under Settings in the left navigation pane.
-
-1.  Click **MyLabKey**
-
-1.  Click the Current Version.
-
-1.  Examine the information about the key you created.
-
-    **Note**: You can always reference this key by using its URI. To get the most current version, just reference `https://keyvaultps.vault.azure.net/keys/MyLabKey/` or if need be the exact version: `https://keyvaultps.vault.azure.net/keys/MyLabKey/da1a3a1efa5dxxxxxxxxxxxxxd53c5959e`
-
-
-1.  Move back to the PowerShell window. To display the current version of the key, enter the following command.
-
-    ```
-    $Key.key.kid
-    ```
-
-
-1.  To view the Key you just created you can use the Get-AzureKeyVaultKey cmdlet. Be sure to change the placeholder text to your vault name.
-
+1. Verify the key was created. Change YourVaultName to the name of your vault. Review the key information. 
     ```
     Get-AZKeyVaultKey -VaultName '<YourVaultName>'
     ```
 
+1. Display the key identifier.
+    ```
+    $Key.key.kid
+    ```
 
-### Task 4: Add a Secret to Key Vault
+1. Move back to the Azure portal and your key vault.
 
-1.  Next, you will add a secret to the **KeyVaultPS**. To do this, add a variable named **$secretvalue** using the following code.
+1. Under **Settings** click **Keys**.
+
+1. Select **MyLabKey** and then click on the current version. 
+
+1. Examine the information about the key you created.
+
+	> You can always reference this key by using its URI. 
+
+	> To get the most current version, reference `https://keyvaultps.vault.azure.net/keys/MyLabKey` or get the specific version with: `https://keyvaultps.vault.azure.net/keys/MyLabKey/da1a3a1efa5dxxxxxxxxxxxxxd53c5959e`
+
+
+#### Task 4: Add a Secret to Key Vault
+
+1. Return to the Cloud Shell.
+
+	> Use *cls* at the prompt to clear the command window. 
+
+1. Add a secret to the key vault by first creating a variable with the secure string value. 
 
     ```
     $secretvalue = ConvertTo-SecureString 'Pa55w.rd1234' -AsPlainText -Force
     ```
 
-
-1.  Next add the secret to the Vault with this command. Be sure to change the placeholder text to your vault name.
+1.  Next add the secret to the vault. Again, change YourVaultName to the name of your vault. Notice the name of the secret is SQLPassword. 
 
     ```
     $secret = Set-AZKeyVaultSecret -VaultName 'YourVaultName' -Name 'SQLPassword' -SecretValue $secretvalue
     ```
 
-1.  Move back to the Azure Portal on **KeyVaultPS** and click **Secrets**
-
-1.  Click the Secret **SQLPassword**
-
-1.  Click the current version
-
-1.  Examine the Secret that you created
-
-    **Note**: You can always reference this key by using its URI. To get the most current version just reference `https://keyvaultps.vault.azure.net/secrets/SQLPassword` or if need be the exact version: `https://keyvaultps.vault.azure.net/secrets/SQLPassword/c5aada85d3acxxxxxxxxxxe8701efafcf3`
-
-
-1.  Click the **Show secret value** button -- notice that the password appears.
-
-1.  To view the Secret, use the Get-AzureKeyVaultSecret cmdlet. Be sure to change the placeholder text to your vault name.
+1. Verify the secret was created.
 
     ```
     Get-AZKeyVaultSecret -VaultName 'YourVaultName'
     ```
 
-### Task 5: Enable a Client Application
+1. Move back to the Azure portal and your key vault.
+
+1. Under **Settings** click **Secrets**.
+
+1. Select **SQLPassword** and review the information. 
+
+1. Move back to the Azure Portal on **KeyVaultPS** and click **Secrets**
+
+1. Select **SQLPassword** and then click on the current version. 
+
+1. Examine the information about the secret you created.
+
+	> You can always reference this secret by using its URI. 
+
+	> To get the most current version, reference `https://keyvaultps.vault.azure.net/secrets/SQLPassword` or get the specific version with: `https://keyvaultps.vault.azure.net/secrets/SQLPassword/c5aada85d3acxxxxxxxxxxe8701efafcf3`
 
 
-You will enable your client application to access the Azure SQL Database service. This will be done by setting up the required authentication and acquiring the Application ID and Secret that you will need to authenticate your application. These steps will be accomplished in the Azure portal.
+## Exercise 2: Create an application to demonstrate using the key vault for encryption
+
+### Estimated timing: xx minutes
+
+In this exercise, you will complete:
+
+- Task 1: Enable a client application to access the Azure SQL Database service. 
+- Task 2: Add a Key Vault policy allowing the application access to the Key Vault.
+- Task 3: Create a SQL Database.
+- Task 4: Create a table in the SQL Database and select data columns for encryption.
 
 
-1.  Open the Azure portal and navigate to Azure Active Directory.
+#### Task 1: Enable a client application to access the Azure SQL Database service. 
 
-1.  Click **App Registrations** under **Manage** in the left navigation pane.
+In this task, you will enable a client application to access the Azure SQL Database service. This will be done by setting up the required authentication and acquiring the Application ID and Secret that you will need to authenticate your application. T
 
-1.  **Click + New registration**
+1. Continue in the Azure portal. 
 
-1.  Provide the name **sqlApp** for your application. Under **Redirect URI (optional)**, select **Web**, and for the SIGN-ON URL type **`https://sqlapp`**
+1. Navigate to the Azure Active Directory blade.
 
-5.  Click **Register**.
+1. Under **Manage** click **App Registrations**.
 
-6.  Once the App Registration is complete click on **sqlApp** if it does not automatically appear.
+1. Click **+ New registration** and complete the required information. 
 
-7.  Copy your Application (client) ID as you will need it later.
+	- Name: **sqlApp** 
 
-8.  Click **Certificates & secrets**
+	- Redirect URI (optional): **Web** - **https://sqlapp**
 
-9.  Click **+ New client secret**
+1.  Click **Register**. 
 
-10.  In the **Description** section, enter **Key1** for the description. Select **1 year** from the **Expires** list, then click **Add**
+1.  When the registration is complete you should be automatically taken to sqlApp. If not, select sqlApp from the App Registrations page. 
 
+1.  On the **Overview** tab, copy your Application (client) ID. You will need this later to set the application permissions. 
 
-1.  Copy the Key1 value as you will need it later. If you close and reopen the blade, the value will show as hidden.
+1.  Under **Manage** click **Certificates & secrets**.
 
-### Task 6: Add a Key Vault Policy allowing the application access to the Key Vault.
+1.  Click **+ New client secret**
 
-1. Just in case the appropriate permissions were not set in the intital tasks, let's make sure you have the required permissions to do the following task. 
+	- Description: **Key1**
 
-1. In the **Azure portal** open your **Resource Group** created at the beginning of the lab
+	- Expires: **in 1 year**
+	
+1. Click **Add** to update the application credentials.
 
-1.  Select the **Azure Key** vault
+1. Copy the Key1 **value**. You will need this later. 
 
-1.  Click **Access Policies**
+	> If you close and reopen the blade, the value will show as hidden.
 
-1.  Select the account associated with your Azure subscription
+#### Task 2: Add a Key Vault policy allowing the application access to the Key Vault
 
-1.  In the **Key Permissions** drop down select **Select All** to highlight all permissions if required.
+In this task, you will ensure required permissions are correctly configured. This validates previous tasks. 
 
-1.  Select **Save** if required.
+1. Continue in the Azure Portal.
 
-    **Important**! You must click save otherwise the permissions will not be committed.
+1. Open the **AZ500LAB10** resource group. 
 
+1. Select your key vault. 
 
-8.  Run the following Powershell in the **Powershell ISE** to set the sqlApp key permissions replacing the placeholder text with **your account details**
+1. Under **Settings** select **Access Policies**.
 
-    
+1. Select the account associated with your Azure subscription.
+
+1. In the **Key Permissions** drop-down ensure all 16 key permissions are selected. If changes are required, be sure to click **Save**. 
+
+1. Open the Cloud Shell.
+
+1. Ensure **PowerShell** is selected in the upper-left drop-down menu.
+
+1. In the next steps, you will set the sqlApp key permissions. 
+
+1. Create a variable for the Application (client) ID. You copied this information previously. 
+   
     ```
-    $subscriptionName = '[Azure_Subscription_Name]'
     $applicationId = '[Azure_AD_Application_ID]'
-    $resourceGroupName = '[Resource_Group_with_KeyVault]'
-    $location = '[Azure_Region_of_KeyVault]'
+	```
+
+1. Create a variable for your key vault name.
+	```
     $vaultName = '[KeyVault_Name]' 
     ```
-    
+
+1. Set the permissions. 
+
     ```
-    Login-AzAccount
-    ```
-    
-    ```
-    Set-AZKeyVaultAccessPolicy -VaultName $vaultName -ResourceGroupName $resourceGroupName -ServicePrincipalName $applicationId -PermissionsToKeys get,wrapKey,unwrapKey,sign,verify,list
+    Set-AZKeyVaultAccessPolicy -VaultName $vaultName -ResourceGroupName AZ500LAB10 -ServicePrincipalName $applicationId -PermissionsToKeys get,wrapKey,unwrapKey,sign,verify,list
     ```
 
+#### Task 3: Create a SQL Database
 
- 
-### Task 7: Use Key Vault to Encrypt Data with Azure SQL Database
-
-
-**Scenario**
-
-In this task, you will create a blank Azure SQL Database, connect to it with SQL Server Management Studio and create a table. You will then encrypt two data columns using an autogenerated key from the Azure Key Vault. Then you will create a Console application using Visual Studio to Load data into the Encrypted Columns and then access that data securely using a connection string that accesses the key via Key Vault.
+In this task, you will create an empty SQL Database and determine the ADO.NET connection string. 
 
 
-1.  From the Azure Portal click **+ Create a resource> Databases > SQL Database**
+1. Continue in the Azure Portal.
 
-1.  Provide the following details on the SQL Database blade and click **Create**.
+1. In the search box at the top of Portal, search for and then select **SQL Databases**.
 
-      - Resource Group: (use existing) **AZ500LAB10**
+1. Click **+ Add** and provide the required information. 
+
+	- Resource Group: (use existing) **AZ500LAB10**
       
-      - Database Name: **medical**
+	- Database Name: **medical**
 
-      - Server: **Create new**
+	- Server: **Create new**
 
-          - Server name: **[Unique Server Name]**
+		- Server name: **[Unique Server Name]**
 
-          - Server Admin Login: **demouser**
+		- Server Admin Login: **demouser**
 
-          - Password: **Pa55w.rd1234**
+		- Password: **Pa55w.rd1234**
 
-          - Location: **[same location as KeyVaultPS]**
+		- Location: **East US** - same location as the key vault
 
-          - Then click **OK**
+		- Click **OK** to save the server information. 
 
-      - Pricing Tier: Standard S0
+1. Click **Review + create** and then **Create**.
 
+1. Wait for the SQL Database to deploy.
 
+1. Navigate to your new SQL Database. If you miss the **Go to resource** link you can get there from the lab resource group. 
 
-1.  Once everything above is configured, select **Review + create,** then **Create**
+1. On the **Overview** blade, click **Show database connection strings**. 
 
-1.  Once the SQL Database is deployed, open it in the Azure Portal to locate and then copy the **ADO.NET Connection String**.
+1. The tabs show different connection strings for ADO.NET, JDBC, ODBC, PHP, and Go. 
+   
+1. Copy the **ADO.NET Connection String**.
 
-**Note**: When you save the connection string for future use, be sure to replace {your_username} with **demouser** and {your_password} with **Pa55w.rd1234**.
-
-
-### Task 8: Create a Table in the SQL Database
-
-1.  From the portal menu navigate to **Resource Groups** > Select **AZ500LAB10** Select the SQLServer name you created in the previous step where the **Medical** Database is located.
-
-1. On the **Overview** Copyt the SQL Server name from **Server name** .
+	> When you use the connection string be sure to replace {your_username} with **demouser** and {your_password} with **Pa55w.rd1234**.
 
 
-1.  Under **Security** Click on **Firewalls and virtual networks**.
+#### Task 4: Create a table in the SQL Database and select data columns for encryption
 
+In this task, you will connect to the SQL Database with SQL Server Management Studio and create a table. You will then encrypt two data columns using an autogenerated key from the Azure Key Vault. 
 
+1. Continue in the Azure Portal with your SQL Database.
 
-1.  Next click **+ Add client IP** and then click **Save**.
+1. From the **Overview** blade, make a note of the **Server name**. You will need this in an upcoming step. 
 
+1. From the **Overview** blade, click on **Set server firewall**.  
 
+1. Click **+ Add client IP** and then click **Save**. This will provide access to the server databases. 
+	
+1. Open SQL Server Management Studio. 
 
-1.  Open SQL Server Management Studio. Connect to the Server using these properties for the **Connect to Server** dialog.
+1. Provide the **Connect to Server** dialog box information. 
 
-    - Server Type: **Database Engine**
+	- Server Type: **Database Engine**
 
     - Server Name: **[found on the Database Overview Blade]**
 
-    - Authentication: **SQL Server Authentication**
+	- Authentication: **SQL Server Authentication**
 
     - Login: **demouser**
 
     - Password: **Pa55w.rd1234**
 
+1. Click **Connect**.
 
-### Task 9: Create and Encrypt a Table
+1. In the **Object Explorer** pane, expand the **Databases** folder.
 
-1.  In SQL Server Management Studio expand **Databases > Right-click medical > New Query**.
+1. Right-click the **medical** database and select **New Query**.
 
-1.  Paste the following code into the query window and click Execute
+1. Paste the following code into the query window and click **Execute**. This will create a **Patients** table.
 
      ```
      CREATE TABLE [dbo].[Patients](
-    
-     [PatientId] [int] IDENTITY(1,1),
-
-     [SSN] [char](11) NOT NULL,
-
-     [FirstName] [nvarchar](50) NULL,
-
-     [LastName] [nvarchar](50) NULL,
-
-     [MiddleName] [nvarchar](50) NULL,
-
-     [StreetAddress] [nvarchar](50) NULL,
-
-     [City] [nvarchar](50) NULL,
-
-     [ZipCode] [char](5) NULL,
-
-     [State] [char](2) NULL,
-
-     [BirthDate] [date] NOT NULL 
-
+		[PatientId] [int] IDENTITY(1,1),
+		[SSN] [char](11) NOT NULL,
+		[FirstName] [nvarchar](50) NULL,
+		[LastName] [nvarchar](50) NULL,
+		[MiddleName] [nvarchar](50) NULL,
+		[StreetAddress] [nvarchar](50) NULL,
+		[City] [nvarchar](50) NULL,
+		[ZipCode] [char](5) NULL,
+		[State] [char](2) NULL,
+		[BirthDate] [date] NOT NULL 
      PRIMARY KEY CLUSTERED ([PatientId] ASC) ON [PRIMARY] );
      ```
-
-
 1.  After the table is created successfully, expand **medical > tables > right-click dbo.Patients** and select **Encrypt Columns**.
 
+1. The **Always Encrypted** wizard displays. 
+
+	- Review the Information page and then click **Next**.
+
+	- On the Column Selection page check **SSN** and **Birthdate**. Set the Encryption Type for SSN to **Deterministic** and for Birthdate choose **Randomized**. Click **Next**.
+
+	- On the Master Key Configuration page, select **Azure Key Vault.** Click **Sign in** and authenticate. Select your Azure Key Vault. Click **Next**.
+
+	- On the Run Settings page, click **Next**.
+	
+	- On the Summary page, click **Finish** to proceed with the encryption.
+
+1. When the encryption process is complete, click **Close**.
+
+1. Expand **medical > security > Always Encrypted Keys**.
+
+	> There are now Column Master Keys and Column Encryption Keys. 
 
 
-1.  Click **Next**.
+George - is there another way to show this without a console app? Maybe we can just add a few records then do a query and how the data is encrypted?
 
-1.  On the Column Selection Screen check **SSN** and **Birthdate**. Then set the Encryption Type for SSN to **Deterministic** and for Birthdate **Randomized**. Click **Next**.
+#### Task x: Build a Console Application to work with Encrypted Columns
 
+Then you will create a Console application using Visual Studio to load data into the encrypted columns and then access that data securely using a connection string that accesses the key in the Key Vault.
 
+1. Open Visual Studio 2019.
 
-1.  On the Master Key Configuration page on the Select the Key store provider, click **Azure Key Vault.** Click **Sign in** and authenticate. Select your Azure Key Vault. Click **Next**.
+1. Sign in using your Azure account.
 
+1. Click **File > New > Project**
 
-
-1.  On the Run Settings screen click **Next** and then **Finish** to Proceed with the encrypting.
-
-
-
-1.  When the encryption process is complete, click **Close** and expand **medical > security > Always Encrypted Keys** and note that now there are keys found.
-
-
-
-### Task 10: Build a Console Application to work with Encrypted Columns
-
-1.  Open Visual Studio 2019 and Sign in using your Azure account.
-
-1.  Click **File > New > Project**
-
-    > NOTE in the next step **DO NOT CHOOSE** **Console App (.NET Core)**  
+    > In the next step **DO NOT CHOOSE** **Console App (.NET Core)**  
  
-1.  Next select **Visual C#** > Seach for **Console App** > Choose **Console App (.NET Framework)** and provide the name **OpsEncrypt** in the location **C:\\** and then click **OK**.
+1. Select **Visual C#** > Search for **Console App** > Choose **Console App (.NET Framework)** and provide the name **OpsEncrypt** in the location **C:\\** and then click **OK**.
 
-
-1.  **Right-Click** the **OpsEncrypt** project > click **Properties**.
-
-
+1. **Right-Click** the **OpsEncrypt** project > click **Properties**.
 
 1.  Change the **Target Framework** to **.NET Framework 4.7.2.** Click **Yes** when prompted to change the **Target Framework.**
 
@@ -409,19 +435,22 @@ In this task, you will create a blank Azure SQL Database, connect to it with SQL
 
 1.  To **Exit** you press enter.
 
-### Task 11: Remove resources.
 
-1. Open Cloud Shell in Powershell
 
-1.  Remove the resource group by running the following command (When prompted to confirm press Y and press enter):
+
+**Clean up resources**
+
+> Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs. 
+
+1. Access the Cloud Shell.
+
+1. Ensure **PowerShell** is selected in the upper-left drop-down menu of the Cloud Shell pane.
+
+1. Remove the resource group using the Cloud Shell and PowerShell.
+
     ```
     Remove-AzResourceGroup -Name "AZ500LAB10"
     ```
 
-1. Close the **Cloud Shell** prompt at the bottom of the portal.
-
-> **Result**: In this exercise, you removed the resources used in this lab.
-
-**Results** : You have now completed this Lab.
 
 

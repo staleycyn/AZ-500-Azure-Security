@@ -16,19 +16,17 @@ You have been asked to create a proof of concept to demonstrate securing Azure f
 	- Configure the storage endpoint so only resources from a specific subnet can access the storage.
 	- Confirm that resources outside the designated subnet cannot access the storage. 
 
-<add architecture diagram>
-
 ## Lab objectives
 
 In this lab, you will complete:
 
-- Exercise 1: Configure a storage endpoint
+- Exercise 1: Service endpoints and security storage
 
-## Exercise 1: Configure a storage endpoint
+## Exercise 1: Service endpoints and security storage
 
 ### Estimated timing: 45 minutes
 
-> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for you class. 
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for your class. 
 
 In this exercise, you will complete:
 
@@ -60,7 +58,11 @@ In this task, you will create a virtual network.
 
 1. Click **Next: IP Addresses**. 
 
-1. Review the IPv4 address space (10.0.0.0/16) and the default subnet (10.0.0.0/24). 
+	- Review the IPv4 address space (10.0.0.0/16).
+
+	- Select the **default** subnet (10.0.0.0/24) and rename it to **Public**.
+
+	- **Save** your changes. 
 
 1. Click **Next: Security**. 
 
@@ -82,7 +84,7 @@ In this task, you will create a subnet and enable a service endpoint for the sub
 
 2. Under **Settings**, select **Subnets**.
 
-1. Select **+ Subnet** and create the required information. Take the default for a setting that is not specified.
+1. Select **+ Subnet** and create the required information. Take the default value for a setting that is not specified.
 
 3.  Under **Add subnet**, select or enter the following information, and then select **OK**:
 
@@ -254,9 +256,9 @@ In this task, you will create a storage account with a file share and obtain the
 
 ### Task 5: Create virtual machines
 
-In this task, you will create two virtual machines one in the default subnet and one in the private subnet. 
+In this task, you will create two virtual machines one in the Private subnet and one in the Public subnet. 
 
-1. This first virtual machine will be in the private subnet.
+1. This first virtual machine will be in the Private subnet.
 
 1. On the Portal menu (top left) select **Create a resource**.
 
@@ -286,7 +288,7 @@ In this task, you will create two virtual machines one in the default subnet and
    
 1. Click **Review + create**.
 
-1. This second virtual machine will be in the default subnet. 
+1. This second virtual machine will be in the Public subnet. 
 
 1. On the Portal menu (top left) select **Create a resource**.
 
@@ -296,7 +298,7 @@ In this task, you will create two virtual machines one in the default subnet and
 
 	- Resource group: **AZ500LAB12**
 
-	- Virtual machine name: **myVmDefault**
+	- Virtual machine name: **myVmPublic**
 	
 	- Region: **East US**
 
@@ -308,7 +310,7 @@ In this task, you will create two virtual machines one in the default subnet and
 
 	- Virtual network: **myVirtualNetwork**
 
-	- Subnet: **Default**
+	- Subnet: **Public**
 
 1. Move to the **Management** tab, and ensure **Boot diagnostics** is **Off**.
 
@@ -318,7 +320,7 @@ In this task, you will create two virtual machines one in the default subnet and
 
 1. You can continue once myVMPrivate has been deployed and is running.
 
-### Task 6: Test the storage connection from the private subnet - confirm access.
+### Task 6: Test the storage connection from the Private subnet - confirm access.
 
 In this task, you will connect to the myVMPrivate virtual machine and map a drive to the file share. 
 
@@ -356,19 +358,19 @@ In this task, you will connect to the myVMPrivate virtual machine and map a driv
 	New-PSDrive -Name Z -PSProvider FileSystem -Root "\\<storage-account-name>.file.core.windows.net\my-file-share"  -Credential $credential
 	```
 
-1. Confirm that the virtual machine has no outbound connectivity to the internet. This request should time out. 
+1. Lastly, confirm that the virtual machine has no outbound connectivity to the internet. This request should time out. 
 
 	 ```
 	ping bing.com
 	```
 
-   	> You receive no replies because the network security group associated to the *Private* subnet does not allow outbound access to the internet.
+   	> You receive no replies because the network security group associated to the Private subnet does not allow outbound access to the internet.
 
 1. Disconnect the **myVMPrivate** remote desktop session.
 
-	> At this point, you have confirmed that the virtual machine in the private subnet can access the storage account. 
+	> At this point, you have confirmed that the virtual machine in the Private subnet can access the storage account. 
 
-####  Task 7: Test the storage connection from the public subnet - access denied
+####  Task 7: Test the storage connection from the Public subnet - access denied
 
 1. Navigate to your **myVMPublic** virtual machines.
 
@@ -382,15 +384,13 @@ In this task, you will connect to the myVMPrivate virtual machine and map a driv
 
 1. Again, run each of the PowerShell commands (previous task) to map Azure file share to drive Z on this machine. 
 
-1. You will receive and **New-PSDrive : Access is denied** error. 
+1. You will receive an **New-PSDrive : Access is denied** error. 
 
-	> Access is denied because the *myVmPublic* virtual machine is deployed in the Public subnet. The Public subnet does not have a service endpoint enabled for the Azure Storage. The storage account only allows network access from the Private subnet..
-
-1.  Close the remote desktop session to the *myVmPublic* VM.
+	> Access is denied because the *myVmPublic* virtual machine is deployed in the Public subnet. The Public subnet does not have a service endpoint enabled for the Azure Storage. The storage account only allows network access from the Private subnet.
 
 1. Disconnect the **myVMPrivate** remote desktop session.
 
-	> At this point, you have confirmed that the virtual machine in the private subnet can access the storage account. 
+	> At this point, you have confirmed that the virtual machine in the Public subnet cannot access the storage account. 
 
 
 **Clean up resources**
