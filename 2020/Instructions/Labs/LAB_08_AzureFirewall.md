@@ -18,10 +18,6 @@ You have been asked to install Azure Firewall. This will help your organization 
 - Firewall Application rules that only allow outbound traffic to www.bing.com. 
 - Firewall Network rules that allow access to DNS server lookups.
 
-The finished architecture should look like this:
-
-![Diagram of the finished architecture](../images/Lab08.svg)
-
 Lab files:
 
 -  **2020\\Allfiles\\Labs\\LAB_08\\template.json**
@@ -52,13 +48,11 @@ In this exercise, you will complete:
 
 In this task, you will review and deploy the lab environment. 
 
-1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
+1. Sign-in to the Azure portal **`https://portal.azure.com/`**
 
-1. Under **Azure services** select **Create a resource**.
+1. On the Portal menu (top left) select **Create a resource**.
 
-1. From the **New** blade, search Azure Marketplace for **Template deployment (deploy using custom templates)**.
-
-1. Use the list of search results to navigate to the **Template deployment (deploy using custom templates)** blade. 
+1. Search for and select **Template deployment (deploy using custom templates)**.
 
 1. Click **Create**.
 

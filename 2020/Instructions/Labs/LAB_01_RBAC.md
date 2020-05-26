@@ -20,29 +20,14 @@ You have also been tasked to assign roles to groups.
 
 - Create a resource group and assign the Service Desk group Virtual Machine Contributor permissions. 
 
-Since this is your first Azure lab you will also review basic skills to ensure you will be successful with the labs.
-
 ## Lab objectives
 
 In this lab, you will complete the following:
 
-- Exercise 0: Practice with the Azure portal.
 - Exercise 1: Create the Senior Admins group with member Joseph Price (Portal). 
 - Exercise 2: Create the Junior Admins group with member Isabel Garcia (PowerShell).
 - Exercise 3: Create the Service Desk group with member Dylan Williams (CLI). 
 - Exercise 4: Assign the Service Desk group Virtual Machine Contributor permissions.
-
-# Exercise 0: Ensure you have 
-
-In this exercise, you will complete:
-
-- Task 1: 
-- Task 2: 
-
-#### Task 1: 
-
-1. The class labs use the Azure
-
 
 ## Exercise 1: Create the Senior Admins group with member Joseph Price. 
 
@@ -59,7 +44,9 @@ In this task, you will create a user account for Joseph Price.
 
 1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
 
-1. Under **Azure services** select **Azure Active Directory**. You may need to scroll right to locate this service.
+1. Use the Portal menu and select **All services**. 
+
+1. Search for and select **Azure Active Directory**.
 
 1. On the **Overview blade** note your tenant domain. You will need this in later steps. This takes the form *xxx.onmicrosoft.com*.
 
@@ -312,11 +299,11 @@ In this exercise, you will:
 
 1. Check the access for **Joseph Price**. 
 
-> Result: You have created users and groups with different Azure tools and used RBAC to assign roles.
+> Result: You have assigned RBAC permissions. 
 
 **Cleanup resources**
 
-
+	> No cleanup of this lab is required. 
 
 
 
