@@ -141,7 +141,7 @@ In this task, you will ad a key to the kev vault and view information about the 
 1. Add a secret to the key vault by first creating a variable with the secure string value. 
 
     ```
-    $secretvalue = ConvertTo-SecureString 'Pa55w.rd1234' -AsPlainText -Force
+    $secretvalue = ConvertTo-SecureString 'Pa55w.rd' -AsPlainText -Force
     ```
 
 1.  Next add the secret to the vault. Again, change YourVaultName to the name of your vault. Notice the name of the secret is SQLPassword. 
@@ -281,7 +281,7 @@ In this task, you will create an empty SQL Database and determine the ADO.NET co
 
 		- Server Admin Login: **demouser**
 
-		- Password: **Pa55w.rd1234**
+		- Password: **Pa55w.rd**
 
 		- Location: **East US** - same location as the key vault
 
@@ -299,7 +299,7 @@ In this task, you will create an empty SQL Database and determine the ADO.NET co
    
 1. Copy the **ADO.NET Connection String**.
 
-	> When you use the connection string be sure to replace {your_username} with **demouser** and {your_password} with **Pa55w.rd1234**.
+	> When you use the connection string be sure to replace {your_username} with **demouser** and {your_password} with **Pa55w.rd**.
 
 
 #### Task 4: Create a table in the SQL Database and select data columns for encryption
@@ -326,7 +326,7 @@ In this task, you will connect to the SQL Database with SQL Server Management St
 
     - Login: **demouser**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **Connect**.
 
@@ -390,8 +390,6 @@ Then you will create a Console application using Visual Studio to load data into
 1. **Right-Click** the **OpsEncrypt** project > click **Properties**.
 
 1.  Change the **Target Framework** to **.NET Framework 4.7.2.** Click **Yes** when prompted to change the **Target Framework.**
-
-
 
 1.  Install the following **NuGet** packages by going to **Tools** > **NuGet Package Manager** > **Package Manager Console.**
 

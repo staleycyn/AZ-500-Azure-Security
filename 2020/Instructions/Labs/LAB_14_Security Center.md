@@ -1,7 +1,7 @@
 ---
 lab:
     title: '14 - Azure Security Center'
-    module: 'Module 04 - Manage security operations'
+    module: 'Module 04 - Manage Security Operations'
 ---
 
 # Lab 14 - Azure Security Center
@@ -16,6 +16,8 @@ You have been asked to create a proof of concept demonstration for Security Cent
 - Review Security Center recommendations for the virtual machine.
 - Implement recommendations for endpoint protection and Just in time VM access. 
 - Review how the Secure Score can be used to determine progress toward creating a more secure infrastructure.
+
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is the region to use for class. 
 
 ## Lab objectives
 

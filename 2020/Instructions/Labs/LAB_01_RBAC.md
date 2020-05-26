@@ -4,21 +4,20 @@ lab:
     module: 'Module 01 - Manage Identity and Access'
 ---
 
-# Lab 01 - Role Based Access Control
+# Lab 01 - Role-Based Access Control
 
 # Student lab manual
 
 ## Lab scenario
 
-You have been asked to create new users and groups.
+You have been asked to create a proof of concept showing how Azure users and groups are created. Also, how role-based access control is used to assign roles to groups. Specifically, you need to:
 
 - Create a Senior Admins group with member Joseph Price. 
 - Create a Junior Admins group with member Isabel Garcia. 
 - Create a Service Desk group with member Dylan Williams.  
+- Assign the Service Desk group Virtual Machine Contributor permissions. 
 
-You have also been tasked to assign roles to groups.
-
-- Create a resource group and assign the Service Desk group Virtual Machine Contributor permissions. 
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is the region to use for class. 
 
 ## Lab objectives
 
@@ -38,7 +37,7 @@ In this exercise, you will complete:
 - Task 1: Use the Portal to create the user account for Joseph Price.
 - Task 2: Use the Portal to create the Senior Admins group and assign the Joseph to the group.
 
-#### Task 1: Use the Portal to create the user account for Joseph Price. 
+#### Task 1: Use the Portal to create the user account for Joseph Price 
 
 In this task, you will create a user account for Joseph Price. 
 
@@ -251,11 +250,13 @@ In this exercise, you will:
 
 1. Under **Azure services** select **Resource groups**. 
 
-1. Click **Add**. Consult your instructor for the preferred region. 
+1. Click **Add** and complete the required information. 
 
-- Resource group name: **AZ500Lab01**
-- Subscription: **your subscription**
-- Location: **East US**
+	- Resource group name: Create new - **AZ500Lab01**
+
+	- Subscription: **your subscription**
+
+	- Location: **East US**
 
 1. Click **Review + create** and then **Create**.
 
@@ -267,7 +268,7 @@ In this exercise, you will:
 
 1. Verify your new resource group is listed. 
 
-### Task 2: Assign the Service Desk Virtual Machine Contributor permissions. 
+#### Task 2: Assign the Service Desk Virtual Machine Contributor permissions. 
 
 1. In the list of **Resource groups**, choose the new **AZ500LAB01** resource group.
 
@@ -301,9 +302,20 @@ In this exercise, you will:
 
 > Result: You have assigned RBAC permissions. 
 
-**Cleanup resources**
+**Clean up resources**
 
-	> No cleanup of this lab is required. 
+> Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs.
+
+1. Access the Cloud Shell.
+
+1. Ensure **PowerShell** is selected in the upper-left drop-down menu of the Cloud Shell pane.
+
+1. Remove the resource group by running the following command (When prompted to confirm press Y and press enter):
+  
+    ```
+    Remove-AzResourceGroup -Name "AZ500LAB01"
+    ```
+1.  Close the **Cloud Shell**. 
 
 
 

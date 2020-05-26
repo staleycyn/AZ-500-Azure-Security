@@ -1,24 +1,27 @@
 ---
 lab:
     title: '04 - MFA, Conditional Access and AAD Identity Protection'
-    module: 'Module 01 - Manage Identity and access'
+    module: 'Module 01 - Manage Identity and Access'
 ---
 
 # Lab 04: MFA, Conditional Access and AAD Identity Protection
 
 # Student lab manual
 
-All tasks in this lab are performed from the Azure portal, except for steps in Exercise 2 performed within a Remote Desktop session to an Azure VM.
-
 Lab files:
 
 -  **2020\\Allfiles\\Labs\\LAB_04\\az-101-04b_azuredeploy.json**
 -  **2020\\Allfiles\\Labs\\LAB_04\\az-101-04b_azuredeploy.parameters.json**
 
-
 ## Lab scenario
 
-Your organization wants to implement Azure MFA, Azure AD Conditional Access Policies, and Azure AD Identity Protection. 
+You have been asked to create a proof of concept xxxx. Specifically, you want to:
+
+- xxx
+- xxx
+- xxx
+
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is the region to use for class. 
 
 ## Lab Objectives
 
@@ -30,8 +33,6 @@ In this lab, you will complete:
 - Exercise 3: Implement Azure AD Identity Protection
 
 ## Exercise 0: Deploy an Azure VM by using an Azure Resource Manager template
-
-> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for you class. 
 
 ### Estimated timing: 10 minutes
 
@@ -47,11 +48,9 @@ In this task, you will create a virtual machine from an ARM template. This machi
 
 1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
 
-1. Under **Azure services** select **Create a resource**.
+1. From the Portal menu select **Create a resource**.
 
-1. From the **New** blade, search Azure Marketplace for **Template deployment (deploy using custom templates)**.
-
-1. Use the list of search results to navigate to the **Template deployment (deploy using custom templates)** blade. 
+1. Search for and select **Template deployment (deploy using custom templates)**.
 
 1. Click **Create**.
 
@@ -85,7 +84,7 @@ In this task, you will create a virtual machine from an ARM template. This machi
     
 	- Admin Username: **Student**
     
-	- Admin Password: **Pa55w.rd1234**
+	- Admin Password: **Pa55w.rd**
     
 	- Virtual Network Name: **az500-04-vnet1**
 
@@ -516,7 +515,7 @@ In this task, you will configure a sign-in risk policy.
 1. Select **More choices** and then **Use a different account**.
 
 	- Email address: **Student**
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **OK** and click **Yes** to verify the identity of the virtual machine. 
 
@@ -580,7 +579,9 @@ In this task, you will review the Azure AD Identity Protection reports generated
 
 **Clean up resources**
 
-> Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs. These steps disable the identity protection policies in the **AdatumLab500-04** Azure AD tenant.
+> Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs. 
+
+These steps disable the identity protection policies in the **AdatumLab500-04** Azure AD tenant.
 
 1. From the **Azure AD Identity Protection** blade.
 
@@ -592,12 +593,12 @@ In this task, you will review the Azure AD Identity Protection reports generated
 
 1. Set **Enforce policy** to **off** and then click **Save**.
 
-> These steps stop the virtual machine in the original lab subscription Azure AD tenant. 
+These steps stop the virtual machine in the original lab subscription Azure AD tenant. 
 
 1. From the **Virtual machine** blade.
 
 1. Select the **az500-04-vm1** virtual machine and select **Stop**. 
 
-1 Click **OK** to deallocate the virtual machine. 
+1. Click **OK** to deallocate the virtual machine. 
 
->  Do not remove any of the resources from this lab as Lab 05 PIM has a dependancy on it.
+>  Do not remove any other resources from this lab as the PIM lab has a dependency on it.

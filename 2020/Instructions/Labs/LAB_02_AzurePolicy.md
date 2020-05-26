@@ -10,7 +10,12 @@ lab:
 
 ## Lab scenario
 
-Your organization's wants to ensure resources are only created in certain Azure regions. You decide to use Azure policy to implement a solution. 
+You have been asked to create a proof of concept showing how Azure policy is used. Specifically, you need to:
+
+- Create an Allowed Locations policy that ensures resource are only created in a specific region.
+- Test to ensure resources are only created in the Allowed location
+
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is the region to use for class. 
 
 ## Lab objectives
 
@@ -21,8 +26,6 @@ In this lab, you will complete:
 ## Exercise 1: Implement Azure Policy
 
 ### Estimated timing: 20 minutes
-
-> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for you class. 
 
 In this exercise, you will complete:
 
@@ -36,7 +39,7 @@ In this task, you will create a resource group for the lab.
 
 1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
 
-1. Open the Cloud Shell by clicking the first icon in the top right of the Azure Portal. 
+1. Open the Cloud Shell. 
 
 1. Ensure **PowerShell** is selected in the upper-left drop-down menu of the Cloud Shell pane.
 
@@ -60,7 +63,9 @@ In this task, you will create a resource group for the lab.
 
 In this task, you will create an Allowed Locations policy assignment and specify which Azure regions the policy can use. 
 
-1. In the **Portal menu** (Top left three lines), click on **All services**. Enter **Policy** into the search box, and click on the **Policy** service.
+1. In the Portal menu select **All services**. 
+
+1. Search for and select **Policy**.
 
 1. Under **Authoring** select **Definitions**.
 
@@ -106,7 +111,9 @@ In this task, you will create an Allowed Locations policy assignment and specify
 
 In this task, you will test the Allowed Locations policy. 
 
-1.  From the Portal menu select **Virtual Networks**.
+1. In the Portal menu select **All services**. 
+
+1. Search for and select **Virtual networks**.
 
 1.  On the **Virtual Networks** blade, click **Add**.
 
@@ -145,6 +152,5 @@ In this task, you will test the Allowed Locations policy.
     ```
     Remove-AzResourceGroup -Name "AZ500LAB02"
     ```
-
-
+1.  Close the **Cloud Shell**. 
 	

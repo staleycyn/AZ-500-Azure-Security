@@ -10,8 +10,14 @@ lab:
 
 ## Lab scenario
 
-Your organization wants to integrate its Active Directory with Azure Active Directory and synchronize user accounts. 
+You have been asked to create a proof of concept to demonstrate how on-premises passwords can be synchronized with Azure. Specifically, you want to:
 
+- xx
+- xx
+- xx
+
+
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is the region to use for class. 
 
 ## Lab objectives
 
@@ -30,28 +36,30 @@ In this exercise, you will complete:
 - Task 1: Identify an available DNS name for an Azure VM deployment
 - Task 2: Use an ARM template to deploy an Azure VM hosting an Active Directory domain controller
 
-
-### Task 1: Identify an available DNS name for an Azure VM deployment
+#### Task 1: Identify an available DNS name for an Azure VM deployment
 
 In this task, you will identify a DNS name for your Azure VM deployment. 
 
-1. From the lab virtual machine, start Microsoft Edge, browse to the Azure portal at [**http://portal.azure.com**](http://portal.azure.com) and sign in by using a Microsoft account that has the Owner role in the Azure subscription you intend to use in this lab and is a Global Administrator of the Azure AD tenant associated with that subscription.
 
-1. From the Azure Portal, start a **PowerShell** session in the Cloud Shell pane.
+1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
 
-    > If this is the first time you are launching the Cloud Shell in the current Azure subscription, you will be asked to create an Azure file share to persist Cloud Shell files. If so, accept the defaults, which will result in creation of a storage account in an automatically generated resource group.
+	> Ensure you are signed in using a Microsoft account that has the Owner role in the Azure subscription you intend to use in this lab and is a Global Administrator of the Azure AD tenant associated with that subscription.
 
-1. In the Cloud Shell pane, run the following command, substituting the placeholder ***&lt;custom-label&gt;*** with any string which is likely to be unique and the placeholder ***&lt;location&gt;*** with the name of the Azure region into which you want to deploy the Azure VM that will host an Active Directory domain controller.
+1. Open the **Cloud Shell**.
+
+1. 1. Ensure **PowerShell** is selected in the upper-left drop-down menu of the Cloud Shell pane.
+
+1. Test the availability of your DNS name. Replace **custom-label** with a name that will be unique. The location is the region into which you want to deploy the Azure VM that will host an Active Directory domain controller.
 
     > To identify Azure regions where you can provision Azure VMs, refer to [**https://azure.microsoft.com/en-us/regions/offers/**](https://azure.microsoft.com/en-us/regions/offers/)
 
-    ```powershell
-    Test-AzDnsAvailability -DomainNameLabel <custom-label> -Location '<location>'
-    ```
+	```powershell
+	Test-AzDnsAvailability -DomainNameLabel <custom-label> -Location '<location>'
+	```
 
-1. Verify that the command returned **True**. If not, rerun the same command with a different value of the ***&lt;custom-label&gt;*** until the command returns **True**.
+1. Verify that the command returned **True**. If not, rerun the same command with a different value of the DomainNameLabel until the command returns **True**.
 
-1. Note the value of the ***&lt;custom-label&gt;*** that resulted in the successful outcome. You will need it in the next task.
+	> You will need the DomainNameLabel in the next task. 
 
 1. Close the Cloud Shell.
 
@@ -59,47 +67,42 @@ In this task, you will identify a DNS name for your Azure VM deployment.
 
 In this task, you will deploy an Azure VM that will host an Active Directory domain controller
 
-1. In the Azure portal, select **Create a resource**.
+1. Continue in the Portal.
 
-1. From the **New** blade, search Azure Marketplace for **Template deployment (deploy using custom templates)**.
+1. From the Portal menu select **Create a resource**.
 
-1. Use the list of search results to navigate to the **Template deployment (deploy using custom templates)** blade. 
+1. Search for and select **Template deployment (deploy using custom templates)**.
 
 1. Click **Create**.
 
-1. From **Load a github quickstart template**, select the **active-directory-new-domain**. Click **Select template**.
+1. Select **active-directory-new-domain** and click **Select template**.
 
-1. You can also find this template in the following location at the GitHub Azure QuickStart Templates page at  [**https://github.com/Azure/azure-quickstart-templates/tree/master/active-directory-new-domain**](https://github.com/Azure/azure-quickstart-templates/tree/master/active-directory-new-domain).
+	> You can also find this template in the following location at the GitHub Azure QuickStart Templates page at  [**https://github.com/Azure/azure-quickstart-templates/tree/master/active-directory-new-domain**](https://github.com/Azure/azure-quickstart-templates/tree/master/active-directory-new-domain).
 
+1. On the **Create an Azure VM with a new AD Forest** blade, initiate a template deployment with the following settings. Take the default value for a setting that is not specified.
 
-1. On the **Create an Azure VM with a new AD Forest** blade, initiate a template deployment with the following settings:
+    - Resource group: Create new - **AZ500LAB06**
 
-    - Subscription: the name of the subscription you are using in this lab
-
-    - Resource group: the name of a new resource group **AZ500LAB06**
-
-    - Location: the name of the Azure region which you used in the previous task
+    - Location: **use the same region as the previous task**
 
     - Admin Username: **Student**
 
-    - Admin Password: **Pa55w.rd1234**
+    - Admin Password: **Pa55w.rd**
 
     - Domain Name: **adatum.com**
 
-    - Dns Prefix: the ***&lt;custom-label&gt;*** you identified in the previous task
+    - Dns Prefix: the unique DomainNameLabel you identified in the previous task
 
     - VM Size: **Standard_D2s_v3**
-
-    - accept the default value for the remaining settings
 
     - Click on **I agree to the terms and conditions stated above**
 
     - Click **Purchase**
 
-    > **Note**: Do not wait for the deployment to complete but proceed to the next exercise. You will use the virtual machine deployed in this task in the third exercise of this lab. Also note it may take between 20 and 30 minutes for the configuration of the Domain Controller to complete)
+    > Do not wait for the deployment to complete but proceed to the next exercise. You will use the virtual machine deployed in this task in the third exercise of this lab. Also note it may take between 20 and 30 minutes for the configuration of the Domain Controller to complete)
 
 
-> **Result**: After you completed this exercise, you have initiated deployment of an Azure VM that will host an Active Directory domain controller by using an Azure Resource Manager template
+> Result: After you completed this exercise, you have initiated deployment of an Azure VM that will host an Active Directory domain controller by using an Azure Resource Manager template
 
 
 
@@ -114,13 +117,13 @@ The main tasks for this exercise are as follows:
 
 #### Task 1: Create an Azure Active Directory (AD) tenant
 
-In this task, you will crate a new Azure AD tenant to use in this lab. 
+In this task, you will cr3ate a new Azure AD tenant to use in this lab. 
 
-1. In the Azure portal, navigate to the **New** blade.
+1. From the Portal menu select **Create a resource**.
 
-1. From the **New** blade, search Azure Marketplace for **Azure Active Directory**.
+1. Search for and select **Azure Active Directory**.
 
-1. Select **Azure Active Directory**. Click **Create**.
+1. Click **Create**.
 
 1. From the **Create directory** blade, create a new Azure AD tenant with the following settings:
 
@@ -169,7 +172,7 @@ In this task, you will add a new Azure AD user and assign them to the Global Adm
 
     - Name: **syncadmin**
 
-    - Password: click **Let me create the password** and type **Pa55w.rd1234** in the **initial password** text box. (Take note of the password)
+    - Password: click **Let me create the password** and type **Pa55w.rd** in the **initial password** text box. (Take note of the password)
 
     - Groups: **0 groups selected**
 
@@ -220,7 +223,7 @@ In this task, you will connect to the virtual machine and create a directory syn
 
     - User name: **Student**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Within the Remote Desktop session to **adVM**, From **Server Manager** click **Tools** from the top left then select **Active Directory Administrative Center**.
 
@@ -236,7 +239,7 @@ In this task, you will connect to the virtual machine and create a directory syn
 
     - User SamAccountName logon: **adatum\aduser1**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
     - Other password options: **Password never expires**
 
@@ -263,7 +266,7 @@ In this task, you will install AD Connect on the virtual machine.
 
     - User name: **ADATUM\\Student**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **Next**
 
@@ -324,7 +327,7 @@ In this task, you will verify that directory synchronization is working.
 > **Result**: After you completed this exercise, you have configured Active Directory in preparation for directory synchronization, installed Azure AD Connect, and verified directory synchronization.
 
 
-## Exercise 4: Remove lab resources
+**Clean up resources**
 
 #### Task 1: Delete the Azure AD tenant.
 

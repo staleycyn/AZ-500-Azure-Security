@@ -10,7 +10,11 @@ lab:
 
 ## Lab scenario 
 
-Your organization has identified several resources in production that need protection from either accidental deletion or configuration changes. You have been asked to demonstrate how a storage account could be protected from changes and deletion. You have decided to use Resource Manager locks. 
+You have been asked to create a proof of concept showing how resource locks can be used to prevent accidental deletion or changes. Specifically, you need to:
+
+- 
+
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is the region to use for class. 
  
 ## Lab objectives
 
@@ -18,12 +22,9 @@ In this lab, you will complete:
 
 - Exercise 1: Resource Manager Locks
 
-
 ## Exercise 1: Resource Manager Locks
 
 ### Estimated timing: 20 minutes
-
-> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for you class. 
 
 In this exercise, you will complete:
 
@@ -39,7 +40,7 @@ In this task, you will create a resource group and storage account for the lab.
 
 1. Sign-in to the Azure portal **`https://portal.azure.com/`**.
 
-1. Open the Azure Cloud Shell by clicking the first icon in the top right of the Azure Portal. 
+1. Open the Azure Cloud Shell.
 
 1. Ensure **PowerShell** is selected in the upper-left drop-down menu of the Cloud Shell pane.
 
@@ -55,9 +56,7 @@ In this task, you will create a resource group and storage account for the lab.
 
 In this task, you will add a read only lock to the storage account. This will protect the resource from accidental deletion or modification. 
 
-1. In the **Portal menu** (Top left three lines), select **Resource Groups**.
-
-1. Select the **AZ500LAB03** resource group.
+1. Navigate to the **AZ500LAB03** resource group.
 
 1. Select the new storage account. 
 
@@ -99,7 +98,7 @@ In this task, you will add a read only lock to the storage account. This will pr
 
 1. You have now verified that a ReadOnly lock will stop accidental deletion and modification of a resource.
 
-#### Task 3: Remove the ReadOnly lock and create a Delete lock.
+#### Task 4: Remove the ReadOnly lock and create a Delete lock.
 
 In this task, you remove the ReadOnly lock from the storage account and create a Delete lock. 
 
@@ -117,7 +116,7 @@ In this task, you remove the ReadOnly lock from the storage account and create a
  
 1. Click **OK**.
 
-#### Task 4: Test the Delete lock.
+#### Task 5: Test the Delete lock.
 
 In this task, you will test the Delete lock. You should be able to modify the storage account, but not delete it. 
 

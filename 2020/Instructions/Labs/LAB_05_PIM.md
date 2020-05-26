@@ -10,13 +10,16 @@ lab:
 
 ## Lab scenario
 
-Your organization wants to implement Azure Privileged Identity Management (PIM) to enable just-in-time administration and control the number of users who can perform privileged operations. The specific requirements are:
+You have been asked to create a proof of concept with Azure Privileged Identity Management (PIM) to enable just-in-time administration and control the number of users who can perform privileged operations. The specific requirements are:
 
 - User aaduser2 should have a permanent assignment to the Security Administrator role. 
 - User aaduser2 should be eligible for the Billing Administrator and Global Reader roles.
 - The Global Reader role must require approval from aaduser3 to activate the role.
 - Configure an Access Review for the Global Reader role and review auditing capabilities.
 
+> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for you class. 
+
+> Before proceeding ensure you have completed Lab 04: MFA, Conditional Acccess and AAD Identity Protection . You will need both the tenant, AdatumLab500-04, and the aaduser1, aaduser2, and aaduser3 user accounts.
 
 ## Lab objectives
 
@@ -26,13 +29,7 @@ In this lab, you will complete:
 - Exercise 2: Activate PIM roles with and without approval.
 - Exercise 3: Create an Access Review and review PIM auditing features.
 
-## Lab prerequisites
-
-> Before proceeding ensure you have completed Lab 04: MFA, Conditional Acccess and AAD Identity Protection . You will need both the tenant, AdatumLab500-04, and the aaduser1, aaduser2, and aaduser3 user accounts.
-
 ## Exercise 1 - Configure PIM users and roles
-
-> For all the resources in this lab, we are using the **East (US)** region. Verify with your instructor this is region to use for you class. 
 
 ### Estimated timing: 15 minutes
 
@@ -50,7 +47,9 @@ In this task, you will make  a user eligible for an Azure AD directory role.
 
 	> Ensure that you are signed-in to the **AdatumLab500-04** Azure AD tenant. You can use the **Directory + subscription** filter to switch between Azure AD tenants. Ensure you are signed in as the tenant owner.
 
-1. In the Azure Portal, click **All services**,search for and select **Azure AD Privileged Identity Management**.
+1. From the Portal menu, click **All services**
+
+1. Search for and select **Azure AD Privileged Identity Management**.
 
 1. Under **Manage**, select **Azure AD roles**.
 
@@ -124,8 +123,6 @@ In this task, you will make  a user eligible for an Azure AD directory role.
  
 #### Task 3: Give a user permanent assignment to a role.
 
-In the Azure Portal, click **All services** and search for and select **Azure AD Privileged Identity Management**.
-
 1. In the Azure Portal, continue in the PIM **Azure AD Roles** blade.
 
 1. Under **Manage** select **Roles** and then **Add assignments**.
@@ -159,7 +156,7 @@ In this exercise, you will complete:
 
 #### Task 1: Activate a role that does not require approval.
 
-In this task, you will activate a role that does not require approval
+In this task, you will activate a role that does not require approval..
 
 1. Open an InPrivate Microsoft Edge window.
 
@@ -344,18 +341,4 @@ In this task, you will review PIM alerts, summary information, and detailed audi
 
 **Clean up resources**
 
-> Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs. While, in this case, there are no additional charges associated with Azure Active Directory tenants and their objects, you might want to consider removing the user accounts, the group accounts, and the Azure Active Directory tenant you created in this lab.
-
-
-1. Access the Cloud Shell.
-
-1. Ensure **PowerShell** is selected in the upper-left drop-down menu of the Cloud Shell pane.
-
-1. Remove the resource group using the Cloud Shell and PowerShell.
-
-    ```
-    Remove-AzResourceGroup -Name "AZ500LAB04"
-    ```
-
-> To remove the Azure AD tenant you created in this lab, follow https://docs.microsoft.com/en-us/azure/active-directory/users-groups-roles/directory-delete-howto
-
+> Remember to remove any newly created Azure resources that you no longer use. Removing unused resources ensures you will not incur unexpected costs. 

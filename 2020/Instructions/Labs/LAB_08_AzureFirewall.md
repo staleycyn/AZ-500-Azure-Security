@@ -275,7 +275,7 @@ In this task, you will test the firewall to confirm that it works as expected.
 
 	- Email address: **localadmin**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **OK** and click **Yes** to verify the identity of the virtual machine. 
 
@@ -299,7 +299,7 @@ In this task, you will test the firewall to confirm that it works as expected.
 
 	- Email address: **localadmin**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Wait for the new remote session to open.
 

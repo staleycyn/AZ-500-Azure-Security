@@ -58,7 +58,7 @@ In this exercise, you will complete:
 
 	- User: **localadmin** 
 
-	- Password for user localadmin: **Pa55w.rd1234**
+	- Password for user localadmin: **Pa55w.rd**
 
 1. Wait for the resources to be created. 
 

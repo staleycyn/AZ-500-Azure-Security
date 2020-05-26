@@ -193,7 +193,7 @@ In this task, you will create a virtual machine to use as a web server.
 
 	- User: **localadmin**
 
-	- Password: **Pa55w.rd1234**
+	- Password: **Pa55w.rd**
 
 	- Public Inbound ports: **None** - We will rely on our NSG rules. 
 
@@ -227,7 +227,7 @@ In this task, you will create a virtual machine to use as a management server.
 
 	- User: **localadmin**
 
-	- Password: **Pa55w.rd1234**
+	- Password: **Pa55w.rd**
 
 	- Public Inbound ports: **None** - We will rely on our NSG rules. 
 
@@ -286,7 +286,7 @@ In this task, you will test the network traffic filters. You should be able to R
 
 	- Email address: **localadmin**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **OK** and click **Yes** to verify the identity of the virtual machine. 
 
@@ -312,7 +312,7 @@ In this task, you will test the network traffic filters. You should be able to R
 
 	- Email address: **localadmin**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **OK** to connect.
 

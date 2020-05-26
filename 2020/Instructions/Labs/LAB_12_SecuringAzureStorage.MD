@@ -274,7 +274,7 @@ In this task, you will create two virtual machines one in the Private subnet and
 
 	- User: **localadmin**
 
-	- Password: **Pa55w.rd1234**
+	- Password: **Pa55w.rd**
 
 1. Move to the **Networking** tab.
 
@@ -304,7 +304,7 @@ In this task, you will create two virtual machines one in the Private subnet and
 
 	- User: **localadmin**
 
-	- Password: **Pa55w.rd1234**
+	- Password: **Pa55w.rd**
 
 1. Move to the **Networking** tab.
 
@@ -336,7 +336,7 @@ In this task, you will connect to the myVMPrivate virtual machine and map a driv
 
 	- Email address: **localadmin**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **OK** and click **Yes** to verify the identity of the virtual machine. 
 

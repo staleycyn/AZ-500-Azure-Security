@@ -350,7 +350,7 @@ In this task, you will create a virtual machine and verify you can access the co
 
 	- User: **localadmin**
 
-	- Password: **Pa55w.rd1234**
+	- Password: **Pa55w.rd**
 
 	- Public inbound ports: **Allow selected ports** - **RDP (3389)**
 
@@ -386,7 +386,7 @@ In this task, you will create a virtual machine and verify you can access the co
 
 	- Email address: **localadmin**
 
-    - Password: **Pa55w.rd1234**
+    - Password: **Pa55w.rd**
 
 1. Click **OK** and click **Yes** to verify the identity of the virtual machine. 
 
